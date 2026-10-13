@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkFlow Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Edu+QLD+Hand:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Pacifico&family=Playwrite+CU+Guides&display=swap');
+</style>
+</head>
+<body>
+
+<div id="cursorBall"></div>
+
+<div id="loginPage" class="login-page">
+    <div class="login-card">
+        <div class="login-logo">
+            <i class="fa-solid fa-users-gear"></i>
+        </div>
+        <h1>WorkFlow</h1>
+        <p>Employee Task Management System</p>
+
+        <div class="login-tabs">
+            <button id="adminTab" class="login-tab active" onclick="showAdminLogin()">Admin</button>
+            <button id="employeeTab" class="login-tab" onclick="showEmployeeLogin()">Employee</button>
+        </div>
+
+        <div id="adminLoginBox" class="login-box">
+            <h2>Admin Login</h2>
+
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="adminUsername" placeholder="Username">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="adminPassword" placeholder="Password">
+            </div>
+
+            <button class="login-btn" onclick="adminLogin()">Login</button>
+        </div>
+
+        <div id="employeeLoginBox" class="login-box hidden">
+            <h2>Employee Login</h2>
+
+            <div class="input-group">
+                <i class="fa-solid fa-id-card"></i>
+                <input type="text" id="employeeLoginId" placeholder="Employee ID">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="employeeLoginPassword" placeholder="Password">
+            </div>
+
+            <button class="login-btn" onclick="employeeLogin()">Login</button>
+        </div>
+    </div>
+</div>
+
+<div id="adminDashboard" class="dashboard hidden">
+
+    <div class="topbar">
+        <div>
+            <h1>
+                <i class="fa-solid fa-users-gear"></i>
+                WorkFlow Pro
+            </h1>
+            <span>Admin Dashboard</span>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </button>
+    </div>
+
+    <div class="container">
+
+        <div class="welcome-section">
+            <h2>Admin Dashboard</h2>
+            <p>Manage employees, tasks and attendance from one place.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fa-solid fa-users"></i>
+                <span>Total Employees</span>
+                <h2 id="totalEmployees">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-user-check"></i>
+                <span>Active Employees</span>
+                <h2 id="activeEmployees">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Total Tasks</span>
+                <h2 id="totalTasks">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Completed Tasks</span>
+                <h2 id="completedTasks">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-clock"></i>
+                <span>Pending Tasks</span>
+                <h2 id="pendingTasks">0</h2>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-user-plus"></i>
+                Add Employee
+            </h2>
+
+            <div class="form-grid">
+                <input type="text" id="employeeId" placeholder="Employee ID">
+                <input type="text" id="employeeName" placeholder="Employee Name">
+                <input type="password" id="employeePassword" placeholder="Password">
+                <input type="email" id="employeeEmail" placeholder="Email">
+                <input type="text" id="employeePhone" placeholder="Phone">
+                <input type="text" id="employeeDepartment" placeholder="Department">
+                <input type="text" id="employeeDesignation" placeholder="Designation">
+                <input type="date" id="joiningDate">
+
+                <select id="employeeStatus">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+
+            <button class="primary-btn" onclick="addEmployee()">
+                <i class="fa-solid fa-plus"></i>
+                Add Employee
+            </button>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-list-check"></i>
+                Assign Task
+            </h2>
+
+            <div class="form-grid">
+                <input type="text" id="taskId" placeholder="Task ID">
+                <input type="text" id="taskTitle" placeholder="Task Title">
+                <input type="date" id="taskDueDate">
+
+                <select id="taskEmployee">
+                    <option value="">Select Employee</option>
+                </select>
+
+                <select id="taskPriority">
+                    <option value="Low">Low Priority</option>
+                    <option value="Medium" selected>Medium Priority</option>
+                    <option value="High">High Priority</option>
+                </select>
+
+                <input type="text" id="taskDescription" placeholder="Task Description">
+            </div>
+
+            <button class="primary-btn" onclick="assignTask()">
+                <i class="fa-solid fa-paper-plane"></i>
+                Assign Task
+            </button>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-calendar-check"></i>
+                Attendance Management
+            </h2>
+
+            <div class="form-grid">
+                <input type="date" id="attendanceDate">
+
+                <select id="attendanceEmployee">
+                    <option value="">Select Employee</option>
+                </select>
+
+                <select id="attendanceStatus">
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                    <option value="Leave">Leave</option>
+                </select>
+            </div>
+
+            <button class="primary-btn" onclick="markAdminAttendance()">
+                <i class="fa-solid fa-check"></i>
+                Save Attendance
+            </button>
+
+            <br><br>
+
+            <div class="attendance-summary">
+                <div>
+                    <span>Present</span>
+                    <strong id="todayPresent">0</strong>
+                </div>
+
+                <div>
+                    <span>Absent</span>
+                    <strong id="todayAbsent">0</strong>
+                </div>
+
+                <div>
+                    <span>Leave</span>
+                    <strong id="todayLeave">0</strong>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="filter-row">
+                <input type="date" id="attendanceFilterDate" onchange="displayAttendance()">
+
+                <select id="attendanceFilterEmployee" onchange="displayAttendance()">
+                    <option value="">All Employees</option>
+                </select>
+
+                <select id="attendanceFilterStatus" onchange="displayAttendance()">
+                    <option value="">All Status</option>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                    <option value="Leave">Leave</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>ID</th>
+                            <th>Employee</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-users"></i>
+                Employee Management
+            </h2>
+
+            <div class="filter-row">
+                <input type="text" id="searchEmployee" placeholder="Search Employee..." oninput="displayEmployees()">
+
+                <select id="filterDepartment" onchange="displayEmployees()">
+                    <option value="">All Departments</option>
+                </select>
+
+                <div></div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Designation</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-chart-line"></i>
+                Task Monitoring
+            </h2>
+
+            <div class="filter-row">
+                <select id="taskStatusFilter" onchange="displayTasks()">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Overdue">Overdue</option>
+                </select>
+
+                <select id="taskPriorityFilter" onchange="displayTasks()">
+                    <option value="">All Priority</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <div></div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Task</th>
+                            <th>Employee</th>
+                            <th>Priority</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Progress</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Recent Activity
+            </h2>
+
+            <div id="activityList" class="activity-list"></div>
+        </div>
+
+    </div>
+</div>
+
+<div id="employeeDashboard" class="dashboard hidden">
+
+    <div class="topbar">
+        <div>
+            <h1>
+                <i class="fa-solid fa-user"></i>
+                WorkFlow Pro
+            </h1>
+            <span>Employee Dashboard</span>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </button>
+    </div>
+
+    <div class="container">
+
+        <div class="welcome-section">
+            <h2 id="employeeWelcome">Welcome</h2>
+            <p>View your profile, tasks and attendance.</p>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-id-card"></i>
+                My Profile
+            </h2>
+
+            <div id="employeeProfile" class="profile-card"></div>
+        </div>
+
+        <div class="stats-grid employee-stats">
+            <div class="stat-card">
+                <i class="fa-solid fa-list"></i>
+                <span>Total Tasks</span>
+                <h2 id="myTotalTasks">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-clock"></i>
+                <span>Pending</span>
+                <h2 id="myPendingTasks">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-spinner"></i>
+                <span>In Progress</span>
+                <h2 id="myProgressTasks">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Completed</span>
+                <h2 id="myCompletedTasks">0</h2>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-calendar-check"></i>
+                My Attendance
+            </h2>
+
+            <button id="attendance-btn" class="attendance-btn" onclick="markAttendance()">
+                <i class="fa-solid fa-check"></i>
+                Mark Today Present
+            </button>
+
+            <div class="my-attendance-status">
+                <p>
+                    Today
+                    <strong id="myTodayAttendance">Not Marked</strong>
+                </p>
+
+                <p>
+                    Present
+                    <strong id="myPresentCount">0</strong>
+                </p>
+
+                <p>
+                    Absent
+                    <strong id="myAbsentCount">0</strong>
+                </p>
+
+                <p>
+                    Leave
+                    <strong id="myLeaveCount">0</strong>
+                </p>
+
+                <p>
+                    Attendance
+                    <strong id="myAttendancePercentage">0%</strong>
+                </p>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeAttendanceTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-bell"></i>
+                Notifications
+            </h2>
+
+            <div id="employeeNotifications" class="notification-list"></div>
+        </div>
+
+        <div class="panel">
+            <h2>
+                <i class="fa-solid fa-tasks"></i>
+                My Assigned Tasks
+            </h2>
+
+            <div id="employeeTasks" class="employee-task-grid"></div>
+        </div>
+
+    </div>
+</div>
+
+<div id="viewModal" class="modal hidden">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <h2>Employee Details</h2>
+        <div id="viewModalBody"></div>
+    </div>
+</div>
+
+<div id="editModal" class="modal hidden">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeEditModal()">×</button>
+        <h2>Edit Employee</h2>
+
+        <input type="hidden" id="editIndex">
+
+        <input type="text" id="editEmployeeId" placeholder="Employee ID">
+        <input type="text" id="editEmployeeName" placeholder="Employee Name">
+        <input type="password" id="editEmployeePassword" placeholder="Password">
+        <input type="email" id="editEmployeeEmail" placeholder="Email">
+        <input type="text" id="editEmployeePhone" placeholder="Phone">
+        <input type="text" id="editEmployeeDepartment" placeholder="Department">
+        <input type="text" id="editEmployeeDesignation" placeholder="Designation">
+        <input type="date" id="editJoiningDate">
+
+        <select id="editEmployeeStatus">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+        </select>
+
+        <button class="primary-btn" onclick="updateEmployee()">
+            Update Employee
+        </button>
+    </div>
+</div>
+
+<div id="taskModal" class="modal hidden">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeTaskModal()">×</button>
+        <h2>Task Details</h2>
+        <div id="taskModalBody"></div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
